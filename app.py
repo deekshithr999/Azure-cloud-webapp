@@ -10,7 +10,7 @@ app = Flask(__name__)
 db = connect_to_database()
 
 # Create tables in the database
-create_tables(db)
+create_tables()
 
 # Create a cursor object
 # cursor = db.cursor()
@@ -43,7 +43,7 @@ def upload_page():
 
         # Process the files
         files = [file1, file2, file3]
-        success_message = upload_files(files, db)
+        success_message = upload_files(files)
         return redirect(url_for('upload_page'))
     return render_template('upload.html')
 
@@ -51,7 +51,7 @@ def upload_page():
 #q3
 @app.route('/standard_display')
 def standard_display():
-    headers, results = standard_tables_display(db)
+    headers, results = standard_tables_display()
     return render_template('standard_display.html', results=results,headers=headers)
 
 #q4
@@ -61,7 +61,7 @@ def query_page():
         hshd_num = request.form.get('hshd_num')
 
         # Query the database based on the input hshd_num
-        headers, results = dynamic_tables_display(db, hshd_num)
+        headers, results = dynamic_tables_display( hshd_num)
         return render_template('query_page.html', results=results, headers=headers)
 
     return render_template('query_page.html', results=None, headers=None)
@@ -75,7 +75,7 @@ def dashboard():
     #                        fig_household_size_spend=fig_household_size_spend, fig_marital_status_spend=fig_marital_status_spend,
     #                        fig_age_range_spend=fig_age_range_spend)
 
-    fig_household_income_html, fig_children_spend_html, fig_household_size_spend_html, fig_marital_status_spend_html, fig_age_range_spend_html = generate_charts(db)
+    fig_household_income_html, fig_children_spend_html, fig_household_size_spend_html, fig_marital_status_spend_html, fig_age_range_spend_html = generate_charts()
     return render_template('dashboard.html', fig_household_income=fig_household_income_html,
                            fig_children_spend=fig_children_spend_html,
                            fig_household_size_spend=fig_household_size_spend_html,

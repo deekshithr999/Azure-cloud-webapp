@@ -25,7 +25,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.io as pio
 
-def connect_to_database():
+def connect_to_database_code():
     """Establishes a db to the MySQL database."""
     try:
         db = mysql.connector.connect(
@@ -40,6 +40,19 @@ def connect_to_database():
         print(f"Error connecting to the database: {e}")
         return None
 
+def connect_to_database():
+    max_retries = 3
+    retries = 0
+    while retries < max_retries:
+        db = connect_to_database_code()
+        if db is not None:
+            return db
+        print("retrying to connect to db ........")
+        retries += 1
+    return None
+
+
+
 def create_cursor(db):
     # Create a cursor object
     cursor = db.cursor()
@@ -47,7 +60,8 @@ def create_cursor(db):
 
 
 
-def create_tables(db):
+def create_tables():
+    db = connect_to_database()
     """Creates tables in the database."""
     if db is None:
         print("No db to the database.")
@@ -105,12 +119,14 @@ def create_tables(db):
         print(f"Error creating tables: {e}")
     finally:
         cursor.close()
+        db.close()
 
 
 
 
-def process_file(file, table_name, db):
+def process_file(file, table_name):
     try:
+        db = connect_to_database()
         cursor = db.cursor()
         cursor.execute(f"TRUNCATE TABLE {table_name}")  # Truncate table to remove existing data
         
@@ -128,20 +144,22 @@ def process_file(file, table_name, db):
         print(f"Error processing file {file}: {e}")
     finally:
         cursor.close()
+        db.close()
 
 
-def upload_files(files, db):
+def upload_files(files):
     file1, file2, file3 = files
     
-    process_file(file1, 'households', db)
-    process_file(file2, 'products', db)
-    process_file(file3, 'transactions', db)
+    process_file(file1, 'households')
+    process_file(file2, 'products')
+    process_file(file3, 'transactions')
 
     return "Files uploaded and processed successfully"
 
 
 #q3
-def standard_tables_display(db):
+def standard_tables_display():
+    db = connect_to_database()
     cursor = db.cursor()
     # cursor.execute("""
     #     SELECT h.HSHD_NUM, t.BASKET_NUM, t.PURCHASE_DATE, t.PRODUCT_NUM, p.DEPARTMENT, p.COMMODITY
@@ -166,10 +184,12 @@ def standard_tables_display(db):
 
     # Close cursor and connection
     cursor.close()
+    db.close()
     return headers, results
 
 
-def dynamic_tables_display(db, hshd_num):
+def dynamic_tables_display( hshd_num):
+    db = connect_to_database()
     cursor = db.cursor()
     cursor.execute("""
         SELECT *
@@ -185,20 +205,23 @@ def dynamic_tables_display(db, hshd_num):
 
     # Close cursor and connection
     cursor.close()
+    db.close()
     return headers, results
 
 
 
 # Function to query data from the database
-def query_data(query, db):
+def query_data(query):
+    db = connect_to_database()
     cursor = db.cursor()
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
+    db.close()
     return result
 
 # Function to generate charts
-def generate_charts(db):
+def generate_charts():
     # Query data for household composition and income range
     query_household_income = """
     SELECT HSHD_COMPOSITION, INCOME_RANGE, SUM(SPEND) AS TOTAL_SPEND
@@ -206,7 +229,7 @@ def generate_charts(db):
     INNER JOIN householdsfull h ON t.HSHD_NUM = h.HSHD_NUM
     GROUP BY HSHD_COMPOSITION, INCOME_RANGE
     """
-    data_household_income = query_data(query_household_income, db)
+    data_household_income = query_data(query_household_income)
     
     # Create DataFrame for household composition and income range
     df_household_income = pd.DataFrame(data_household_income, columns=['HSHD_COMPOSITION', 'INCOME_RANGE', 'TOTAL_SPEND'])
@@ -223,7 +246,7 @@ def generate_charts(db):
     INNER JOIN transactionsfull t ON h.HSHD_NUM = t.HSHD_NUM
     GROUP BY CHILDREN
     """
-    data_children_spend = query_data(query_children_spend, db)
+    data_children_spend = query_data(query_children_spend)
     
     # Create DataFrame for presence of children and total spend
     df_children_spend = pd.DataFrame(data_children_spend, columns=['CHILDREN', 'TOTAL_SPEND'])
@@ -239,7 +262,7 @@ def generate_charts(db):
     INNER JOIN transactionsfull t ON h.HSHD_NUM = t.HSHD_NUM
     GROUP BY HSHH_SIZE
     """
-    data_household_size_spend = query_data(query_household_size_spend, db)
+    data_household_size_spend = query_data(query_household_size_spend)
     
     # Create DataFrame for household size and total spend
     df_household_size_spend = pd.DataFrame(data_household_size_spend, columns=['HSHH_SIZE', 'TOTAL_SPEND'])
@@ -255,7 +278,7 @@ def generate_charts(db):
     INNER JOIN transactionsfull t ON h.HSHD_NUM = t.HSHD_NUM
     GROUP BY MARITAL_STATUS
     """
-    data_marital_status_spend = query_data(query_marital_status_spend, db)
+    data_marital_status_spend = query_data(query_marital_status_spend)
     
     # Create DataFrame for marital status and total spend
     df_marital_status_spend = pd.DataFrame(data_marital_status_spend, columns=['MARITAL_STATUS', 'TOTAL_SPEND'])
@@ -271,7 +294,7 @@ def generate_charts(db):
     INNER JOIN transactionsfull t ON h.HSHD_NUM = t.HSHD_NUM
     GROUP BY AGE_RANGE
     """
-    data_age_range_spend = query_data(query_age_range_spend, db)
+    data_age_range_spend = query_data(query_age_range_spend)
     
     # Create DataFrame for age range and total spend
     df_age_range_spend = pd.DataFrame(data_age_range_spend, columns=['AGE_RANGE', 'TOTAL_SPEND'])
