@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f7f7;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #555;
+        }
+        .chart {
+            margin-bottom: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Demo: Retail Data Analysis</h1>
+        <div class="chart">
+            {{ fig_household_income|safe }}
+        </div>
+        <div class="chart">
+            {{ fig_children_spend|safe }}
+        </div>
+        <div class="chart">
+            {{ fig_household_size_spend|safe }}
+        </div>
+        <div class="chart">
+            {{ fig_marital_status_spend|safe }}
+        </div>
+        <div class="chart">
+            {{ fig_age_range_spend|safe }}
+        </div>
+    </div>
+</body>
+</html> 

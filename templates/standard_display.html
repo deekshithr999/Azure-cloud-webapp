@@ -1,0 +1,101 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction Results</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='standard_display.css') }}">
+</head>
+<body>
+    <h1>Transaction Results</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>HSHD_NUM</th>
+                <th>BASKET_NUM</th>
+                <th>PURCHASE_DATE</th>
+                <th>PRODUCT_NUM</th>
+                <th>DEPARTMENT</th>
+                <th>COMMODITY</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in results %}
+            <tr>
+                {% for item in row %}
+                <td>{{ item }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ url_for('main_page') }}">Go to Main Page</a>
+</body>
+</html> -->
+
+
+<!-- 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction Results</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='standard_display.css') }}">
+</head>
+<body>
+    <h1>Transaction Results</h1>
+    <table>
+        <thead>
+            <tr>
+                {% for column in columns %}
+                <th>{{ column }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in results %}
+            <tr>
+                {% for item in row %}
+                <td>{{ item }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ url_for('main_page') }}">Go to Main Page</a>
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction Results</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/standard_display.css') }}">
+</head>
+<body>
+    <h1>Transaction Results</h1>
+    <table>
+        <thead>
+            <tr>
+                {% for header in headers %}
+                <th>{{ header }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in results %}
+            <tr>
+                {% for item in row %}
+                <td>{{ item }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ url_for('main_page') }}">Go to Main Page</a>
+</body>
+</html>

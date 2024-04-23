@@ -1,0 +1,7 @@
+Flask~=2.2.2
+Werkzeug~=2.2.2
+mysql-connector~=2.2.9
+plotly~=5.3.1
+pandas~=2.0.3
+
+
