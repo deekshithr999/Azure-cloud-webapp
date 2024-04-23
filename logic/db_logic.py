@@ -202,8 +202,8 @@ def generate_charts(db):
     # Query data for household composition and income range
     query_household_income = """
     SELECT HSHD_COMPOSITION, INCOME_RANGE, SUM(SPEND) AS TOTAL_SPEND
-    FROM transactions t
-    INNER JOIN households h ON t.HSHD_NUM = h.HSHD_NUM
+    FROM transactionsfull t
+    INNER JOIN householdsfull h ON t.HSHD_NUM = h.HSHD_NUM
     GROUP BY HSHD_COMPOSITION, INCOME_RANGE
     """
     data_household_income = query_data(query_household_income, db)
@@ -219,8 +219,8 @@ def generate_charts(db):
     # Query data for presence of children and total spend
     query_children_spend = """
     SELECT CHILDREN, SUM(SPEND) AS TOTAL_SPEND
-    FROM households h
-    INNER JOIN transactions t ON h.HSHD_NUM = t.HSHD_NUM
+    FROM householdsfull h
+    INNER JOIN transactionsfull t ON h.HSHD_NUM = t.HSHD_NUM
     GROUP BY CHILDREN
     """
     data_children_spend = query_data(query_children_spend, db)
@@ -235,8 +235,8 @@ def generate_charts(db):
     # Query data for household size and total spend
     query_household_size_spend = """
     SELECT HSHH_SIZE, SUM(SPEND) AS TOTAL_SPEND
-    FROM households h
-    INNER JOIN transactions t ON h.HSHD_NUM = t.HSHD_NUM
+    FROM householdsfull h
+    INNER JOIN transactionsfull t ON h.HSHD_NUM = t.HSHD_NUM
     GROUP BY HSHH_SIZE
     """
     data_household_size_spend = query_data(query_household_size_spend, db)
@@ -251,8 +251,8 @@ def generate_charts(db):
     # Query data for marital status and total spend
     query_marital_status_spend = """
     SELECT MARITAL_STATUS, SUM(SPEND) AS TOTAL_SPEND
-    FROM households h
-    INNER JOIN transactions t ON h.HSHD_NUM = t.HSHD_NUM
+    FROM householdsfull h
+    INNER JOIN transactionsfull t ON h.HSHD_NUM = t.HSHD_NUM
     GROUP BY MARITAL_STATUS
     """
     data_marital_status_spend = query_data(query_marital_status_spend, db)
@@ -267,8 +267,8 @@ def generate_charts(db):
     # Query data for age range and total spend
     query_age_range_spend = """
     SELECT AGE_RANGE, SUM(SPEND) AS TOTAL_SPEND
-    FROM households h
-    INNER JOIN transactions t ON h.HSHD_NUM = t.HSHD_NUM
+    FROM householdsfull h
+    INNER JOIN transactionsfull t ON h.HSHD_NUM = t.HSHD_NUM
     GROUP BY AGE_RANGE
     """
     data_age_range_spend = query_data(query_age_range_spend, db)
